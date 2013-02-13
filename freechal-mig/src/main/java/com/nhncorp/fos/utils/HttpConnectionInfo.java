@@ -17,8 +17,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import com.nhn.is.utils.HttpConnectionUtil;
-
 /**
  * HTTP 접속 정보를 가지고 있는 domain.<br>
  * request method (GET, POST) 및<br>
