@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/decorator">
+
+
+    <!-- ================================================================= -->
+    <!-- Layout 예외 필터 -->
+    <!-- ================================================================= -->
+
+    <excludes>
+    	<pattern>/monitor/l7check*</pattern>
+        <pattern>/owfs/*</pattern>
+        <pattern>/sso/*</pattern>
+        <pattern>/**/boardComment/list</pattern>
+        <pattern>/**/pagelet/**</pattern>
+        <pattern>/openConditioner/**</pattern>
+        <pattern>/interwork/attn/**</pattern>
+        <pattern>/error**</pattern>
+        <pattern>/interwork/servlet/**</pattern>
+    </excludes>
+
+
+
+
+	<!-- ================================================================= -->
+	<!-- 관리자 홈페이지 -->
+	<!-- ================================================================= -->
+
+	<!-- 관리자 홈페이지 Layout -->
+	<decorator name="admin" page="layout-admin-public.jsp">
+		<pattern>/admin</pattern>
+		<pattern>/admin/*</pattern>
+		<pattern>/admin/workGuide/*</pattern>
+		<pattern>/admin/board/one2one</pattern>
+		<pattern>/admin/board/one2one/*</pattern>
+	</decorator>
+
+    <!-- 관리자 홈페이지 데쉬보드 (Admin Left Menu 포함) Layout -->
+    <decorator name="adminDashboard" page="layout-admin-dashboard.jsp">
+        <pattern>/admin/board/**</pattern>
+        <pattern>/admin/dashboard/**</pattern>
+    </decorator>
+
+	<!-- 관리자 홈페이지 Popup -->
+	<decorator name="adminPopup" page="layout-admin-popup.jsp">
+		<pattern>/admin/sites/footerPreview</pattern>
+		<pattern>/admin/boardArticleForm/popup/**</pattern>
+		<pattern>/admin/adminMenuAuthority/authGroupPop</pattern>
+		<pattern>/admin/boardMetaAuthority/popup/**</pattern>
+		<pattern>/admin/board/adminArticleOpinionList/**</pattern>
+		<pattern>/admin/statistic/tensionPop</pattern>
+		<pattern>/admin/statistic/gnbPop</pattern>
+		<pattern>/admin/statistic/myTaskPop</pattern>
+	</decorator>
+
+
+
+
+
+
+    <!-- ================================================================= -->
+    <!-- 사용자 홈페이지 -->
+    <!-- ================================================================= -->
+
+	<!-- 사용자 홈페이지 Loyout -->
+    <decorator name="public" page="layout-public.jsp">
+        <pattern>/*</pattern>
+        <pattern>/admin/sites/*/preview</pattern>
+    </decorator>
+
+	<!-- 사용자 홈페이지 Popup -->
+	<decorator name="popup" page="layout-popup.jsp">
+		<pattern>/**/board/printBoardArticle/**</pattern>
+		<pattern>/**/board/preViewArticle</pattern>
+	</decorator>
+	<decorator name="popup2" page="layout-popup2.jsp">
+		<pattern>/**/boardMetaMailing/**</pattern>
+		<pattern>/**/sendMaiLArticleContent/**</pattern>
+		<pattern>/**/workGuide/**</pattern>
+	</decorator>
+
+    <!-- 외부제공 GNB Layout -->
+    <decorator name="globalGNB" page="layout-globalGNB.jsp">
+        <pattern>/global/gnb</pattern>
+    </decorator>
+
+	<!-- [정리필요] Ajax 전용 -->
+	<decorator name="ajax" page="layout-ajax.jsp">
+		<pattern>/*Ajax</pattern>
+	</decorator>
+
+</decorators>
