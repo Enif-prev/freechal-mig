@@ -15,14 +15,7 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
-import org.apache.commons.lang.StringUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * HTTP 통신을 통하여 text 혹은 XML Document 를 가져오는 util.
@@ -54,7 +47,7 @@ public class HttpConnectionUtil {
 	 * @throws Exception
 	 */
 	public static String getText(String url) throws SocketTimeoutException,
-		Exception {
+			Exception {
 		return getText(url, null, null);
 	}
 
@@ -73,8 +66,8 @@ public class HttpConnectionUtil {
 	 *             타임아웃에 걸렸을 경우
 	 * @throws Exception
 	 */
-	public static String getText(String url, String ssoUser, String smSession) throws SocketTimeoutException,
-		Exception {
+	public static String getText(String url, String ssoUser, String smSession)
+			throws SocketTimeoutException, Exception {
 		return getText(url, ssoUser, smSession, 10000, 10000);
 	}
 
@@ -98,10 +91,10 @@ public class HttpConnectionUtil {
 	 * @throws Exception
 	 */
 	public static String getText(String url, String ssoUser, String smSession,
-		int connectTimeout, int readTimeout) throws SocketTimeoutException,
-		Exception {
+			int connectTimeout, int readTimeout) throws SocketTimeoutException,
+			Exception {
 		HttpConnectionInfo info = new HttpConnectionInfo(url, connectTimeout,
-			readTimeout);
+				readTimeout);
 		info.addCookie(COOKIE_NM_SSO_USER, ssoUser);
 		info.addCookie(COOKIE_NM_SMSESSION, smSession);
 		return getText(info);
@@ -117,14 +110,14 @@ public class HttpConnectionUtil {
 	 *             타임아웃에 걸렸을 경우
 	 * @throws Exception
 	 */
-	public static String getText(HttpConnectionInfo info) throws SocketTimeoutException,
-		Exception {
+	public static String getText(HttpConnectionInfo info)
+			throws SocketTimeoutException, Exception {
 		if (null == info) {
 			return null;
 		}
 		InputStream is = getInputStream(info);
 		if (is != null) {
-			return is2str(is);
+			return is2str(is, info);
 		}
 		logger.warn("No data on this URL...");
 		return null;
@@ -142,9 +135,8 @@ public class HttpConnectionUtil {
 	 * @throws IOException
 	 *             일반적인 IO 예외
 	 */
-	public static HttpURLConnection getConnection(HttpConnectionInfo info) throws MalformedURLException,
-		SocketTimeoutException,
-		IOException {
+	public static HttpURLConnection getConnection(HttpConnectionInfo info)
+			throws MalformedURLException, SocketTimeoutException, IOException {
 		if (null == info) {
 			return null;
 		}
@@ -152,7 +144,8 @@ public class HttpConnectionUtil {
 		if ("GET".equals(info.getRequestMethod())) {
 			url = info.getFullUrl();
 		}
-		HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
+		HttpURLConnection conn = (HttpURLConnection) new URL(url)
+				.openConnection();
 		conn.setConnectTimeout(info.getConnectTimeout());
 		conn.setReadTimeout(info.getReadTimeout());
 		conn.setRequestMethod(info.getRequestMethod());
@@ -165,17 +158,18 @@ public class HttpConnectionUtil {
 		if (null != info.getCookieMap()) {
 			StringBuilder cookie = new StringBuilder();
 			for (String key : info.getCookieMap().keySet()) {
-				cookie.append(key).append("=").append(
-					info.getCookieMap().get(key)).append(";");
+				cookie.append(key).append("=")
+						.append(info.getCookieMap().get(key)).append(";");
 			}
 			conn.setRequestProperty("Cookie", cookie.toString());
 		}
 		String requestBody = info.getRequestBody();
 		if ("POST".equals(info.getRequestMethod()) && requestBody.length() > 0) {
-			conn.setFixedLengthStreamingMode(requestBody.getBytes(info.getEncoding()).length);
+			conn.setFixedLengthStreamingMode(requestBody.getBytes(info
+					.getEncoding()).length);
 			conn.setDoOutput(true);
 			OutputStreamWriter osw = new OutputStreamWriter(
-				conn.getOutputStream(), info.getEncoding());
+					conn.getOutputStream(), info.getEncoding());
 			osw.write(requestBody);
 			osw.flush();
 			osw.close();
@@ -198,9 +192,8 @@ public class HttpConnectionUtil {
 	 * @throws IOException
 	 *             일반적인 IO 예외
 	 */
-	public static InputStream getInputStream(HttpConnectionInfo info) throws MalformedURLException,
-		SocketTimeoutException,
-		IOException {
+	public static InputStream getInputStream(HttpConnectionInfo info)
+			throws MalformedURLException, SocketTimeoutException, IOException {
 		if (null == info) {
 			return null;
 		}
@@ -221,15 +214,17 @@ public class HttpConnectionUtil {
 	 * InputStream 을 string 으로 변환하여 반환한다.
 	 * 
 	 * @param is
+	 * @param info
 	 * @return
 	 * @throws IOException
 	 *             일반적인 IO 예외
 	 */
-	private static String is2str(InputStream is) throws IOException {
+	private static String is2str(InputStream is, HttpConnectionInfo info)
+			throws IOException {
 		if (null == is) {
 			return null;
 		}
-		InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+		InputStreamReader isr = new InputStreamReader(is, info.getEncoding());
 		char[] cbuf = new char[1];
 		StringBuilder sb = new StringBuilder();
 		while (isr.read(cbuf) > 0) {

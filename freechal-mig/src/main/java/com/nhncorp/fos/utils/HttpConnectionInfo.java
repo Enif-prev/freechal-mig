@@ -30,7 +30,7 @@ public class HttpConnectionInfo implements Serializable {
 	private static final long serialVersionUID = -8059153538342332622L;
 
 	private String url = null;
-	private String encoding = "UTF-8";
+	private String encoding = "euc-kr";
 	private String requestMethod = "GET";
 	private Map<String, String> headerMap;
 	private Map<String, String> cookieMap;
